@@ -4,37 +4,51 @@
 #define MAX 100
 
 typedef struct KeyValue {
-    char key[50];
-    char value[100];
+	char key[50];
+	char value[100];
 } KeyValue;
 
 KeyValue store[MAX];
 int count = 0;
 
 void set(char *key, char *value) {
-    // we need strcpy to input values in it
-    strcpy(store[count].key, key);
-    strcpy(store[count].value, value);
-    count++;
+	if (count < MAX) {
+		strcpy(store[count].key, key);
+		strcpy(store[count].value, value);
+		count++;
+	} 
+	else {
+		printf("Store is full!\n");
+	}
 }
 
 int main() {
-    char key[50];
-    char value[100];
-    
-    printf("Welcome To Keybox\n");
-    printf("\n");
+	char key[50];
+	char value[100];
 
-    printf("Enter The Key: ");
-    scanf("%s", key);
+	while (1) {
+		printf("Welcome To Keybox\n\n");
 
-    printf("Enter The Value: ");
-    scanf("%s", value);
+		printf("Enter The Key (or type 'exit' to quit): ");
+		scanf("%49s", key); // 49 limit to avoid buffer overflow
 
-    set(key, value);
+		if (strcmp(key, "exit") == 0) {
+			break;
+		}
 
-    printf("\nStored Key-Value Pair:\n");
-    printf("%s : %s\n", store[0].key, store[0].value);
+		printf("Enter The Value: ");
+		scanf("%99s", value);
 
-    return 0;
+		set(key, value);
+
+		printf("\nAll Stored Key-Value Pairs:\n");
+		for (int i = 0; i < count; i++) {
+			printf("%s : %s\n", store[i].key, store[i].value);
+		}
+		printf("\n");
+	}
+
+	printf("You Exited\n");
+
+	return 0;
 }
